@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jayam Akshay — Data Analyst &amp; Power BI Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{
+    --bg:#0d1116;
+    --panel:#151b22;
+    --grid:#242c36;
+    --text:#f1ede2;
+    --muted:#8b93a1;
+    --amber:#e8a33d;
+    --teal:#4aab98;
+    --radius:10px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  a, button{cursor:none;}
+  ::selection{background:var(--amber); color:#171208;}
+
+  /* faint dashboard grid backdrop */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:48px 48px;
+    opacity:0.18;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1000px; margin:0 auto; padding:0 24px; position:relative; z-index:2;}
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit;}
+
+  /* ===== custom cursor ===== */
+  #cursor-dot, #cursor-ring{
+    position:fixed; top:0; left:0;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+  }
+  #cursor-dot{
+    width:6px; height:6px;
+    background:var(--amber);
+  }
+  #cursor-ring{
+    width:34px; height:34px;
+    border:1px solid var(--teal);
+    transition:width 0.2s, height 0.2s, border-color 0.2s, opacity 0.2s;
+    opacity:0.7;
+  }
+  #cursor-ring.hovering{
+    width:54px; height:54px;
+    border-color:var(--amber);
+    opacity:1;
+  }
+  .cursor-trail{
+    position:fixed; top:0; left:0;
+    width:4px; height:4px;
+    border-radius:50%;
+    background:var(--teal);
+    pointer-events:none;
+    z-index:9998;
+    transform:translate(-50%,-50%);
+  }
+  .cursor-ripple{
+    position:fixed; top:0; left:0;
+    width:10px; height:10px;
+    border-radius:50%;
+    border:1px solid var(--amber);
+    pointer-events:none;
+    z-index:9997;
+    transform:translate(-50%,-50%);
+    animation:rippleOut 0.6s ease-out forwards;
+  }
+  @keyframes rippleOut{
+    to{ width:70px; height:70px; opacity:0; }
+  }
+  .magnetic{transition:transform 0.25s cubic-bezier(0.2,0.8,0.2,1);}
+  @media (max-width:900px){
+    #cursor-dot,#cursor-ring{display:none;}
+    body,a,button{cursor:auto;}
+  }
+
+  /* ===== particle canvas ===== */
+  #particles{
+    position:fixed; inset:0; z-index:0;
+    opacity:0.6;
+  }
+
+  /* ===== 3D hero canvas ===== */
+  #hero-3d{
+    position:absolute; top:0; right:0;
+    width:100%; height:100%;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  /* ===== scroll reveal ===== */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:10;
+    background:rgba(13,17,22,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--grid);
+  }
+  nav .wrap{display:flex; justify-content:space-between; align-items:center; padding:16px 24px;}
+  nav .brand{font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem;}
+  nav .brand span{color:var(--amber);}
+  nav ul{list-style:none; display:flex; gap:24px; flex-wrap:wrap;}
+  nav a{text-decoration:none; color:var(--muted); font-size:0.88rem; transition:color 0.2s;}
+  nav a:hover{color:var(--text);}
+
+  /* HERO */
+  header.hero{
+    position:relative;
+    padding:110px 0 110px;
+    min-height:640px;
+    display:flex; align-items:center;
+    overflow:hidden;
+  }
+  .hero-content{position:relative; z-index:2; max-width:100%;}
+  .hero-text{max-width:640px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--teal);
+    font-size:0.8rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:"●"; color:var(--amber); font-size:0.6rem; animation:blink 2s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  h1.title{font-size:clamp(2.4rem, 5.5vw, 4rem); line-height:1.05;}
+  h1.title em{font-style:italic; color:var(--amber);}
+  .hero-sub{
+    color:#c7cdd6;
+    font-size:1.1rem;
+    max-width:560px;
+    margin-top:22px;
+    text-shadow:0 2px 12px rgba(13,17,22,0.9);
+  }
+  .hero-cta{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    padding:12px 22px; border-radius:6px; text-decoration:none;
+    font-size:0.92rem; font-weight:500; transition:transform 0.15s, opacity 0.15s;
+    display:inline-block;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--amber); color:#171208;}
+  .btn-ghost{border:1px solid var(--grid); color:var(--text);}
+
+  .mosaic{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:auto auto;
+    gap:14px;
+    width:100%;
+  }
+  .tile{
+    background:rgba(21,27,34,0.75);
+    border:1px solid var(--grid);
+    border-radius:var(--radius);
+    padding:20px;
+    backdrop-filter:blur(2px);
+  }
+  .tile:nth-child(5){grid-column:span 2;}
+  .tile:nth-child(6){grid-column:span 2;}
+  .tile .label{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
+  .tile .value{font-family:'Fraunces',serif; font-size:1.9rem; font-weight:600; margin-top:8px; color:var(--text);}
+  .tile .value.amber{color:var(--amber);}
+  .tile .value.teal{color:var(--teal);}
+  .bars{display:flex; align-items:flex-end; gap:6px; height:46px; margin-top:12px;}
+  .bars i{flex:1; background:var(--teal); border-radius:2px 2px 0 0; opacity:0.85;}
+  @media (max-width:720px){
+    .mosaic{grid-template-columns:repeat(2,1fr);}
+    .tile:nth-child(5), .tile:nth-child(6){grid-column:span 2;}
+  }
+
+  .scroll-hint{
+    position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+    z-index:2; font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
+    color:var(--muted); letter-spacing:0.15em; display:flex; flex-direction:column;
+    align-items:center; gap:8px;
+  }
+  .scroll-hint span{width:1px; height:24px; background:linear-gradient(var(--muted),transparent); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:0.25;} 50%{opacity:1;}}
+
+  /* SECTIONS */
+  section{padding:90px 0; position:relative; z-index:2;}
+  section.alt{background:rgba(21,27,34,0.7); border-top:1px solid var(--grid); border-bottom:1px solid var(--grid);}
+  .section-head{margin-bottom:44px;}
+  .section-head .eyebrow{margin-bottom:10px;}
+  .section-head h2{font-size:clamp(1.7rem,3.5vw,2.3rem);}
+
+  /* SKILLS */
+  .skills-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+  .skill-card{
+    background:rgba(13,17,22,0.6); border:1px solid var(--grid); border-radius:var(--radius);
+    padding:24px; transition:transform 0.25s, border-color 0.25s;
+  }
+  .skill-card:hover{transform:translateY(-4px); border-color:var(--teal);}
+  .skill-card h3{font-size:1.05rem; margin-bottom:10px; color:var(--amber);}
+  .skill-card p{color:var(--muted); font-size:0.92rem;}
+  @media (max-width:720px){.skills-grid{grid-template-columns:1fr;}}
+
+  /* PROJECTS */
+  .project{
+    display:grid; grid-template-columns:120px 1fr; gap:24px;
+    padding:28px 0; border-bottom:1px solid var(--grid);
+    transition:transform 0.25s;
+  }
+  .project:hover{transform:translateX(6px);}
+  .project:last-child{border-bottom:none;}
+  .project .tag{font-family:'IBM Plex Mono',monospace; color:var(--teal); font-size:0.78rem;}
+  .project h3{font-size:1.2rem; margin-bottom:8px;}
+  .project p{color:var(--muted); font-size:0.94rem; max-width:600px;}
+  .project ul{margin-top:10px; padding-left:18px; color:var(--muted); font-size:0.9rem;}
+  .project ul li{margin-bottom:4px;}
+  .project .stack{margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;}
+  .project .stack span{
+    font-family:'IBM Plex Mono',monospace; font-size:0.72rem;
+    border:1px solid var(--grid); border-radius:20px; padding:4px 10px; color:var(--muted);
+  }
+  @media (max-width:600px){.project{grid-template-columns:1fr; gap:8px;}}
+
+  /* CERTS */
+  .cert-list{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .cert-card{
+    background:rgba(13,17,22,0.6); border:1px solid var(--grid); border-radius:var(--radius);
+    padding:20px; transition:transform 0.25s, border-color 0.25s;
+  }
+  .cert-card:hover{transform:translateY(-4px); border-color:var(--amber);}
+  .cert-card .date{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--teal);}
+  .cert-card h3{font-size:0.98rem; margin-top:8px; line-height:1.3;}
+  .cert-card p{color:var(--muted); font-size:0.85rem; margin-top:6px;}
+  @media (max-width:720px){.cert-list{grid-template-columns:1fr;}}
+
+  /* INTERESTS */
+  .interest-row{
+    display:flex; align-items:center; gap:20px; padding:18px 0;
+    border-bottom:1px solid var(--grid);
+  }
+  .interest-row:last-child{border-bottom:none;}
+  .interest-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--bg);
+    background:var(--teal); border-radius:6px; padding:6px 10px; white-space:nowrap;
+  }
+  .interest-row p{color:var(--muted); font-size:0.92rem;}
+
+  /* CONTACT */
+  .contact-panel{
+    background:rgba(21,27,34,0.85); border:1px solid var(--grid); border-radius:var(--radius);
+    padding:44px; text-align:center;
+  }
+  .contact-panel h2{font-size:clamp(1.6rem,4vw,2.2rem); margin-bottom:14px;}
+  .contact-panel p{color:var(--muted); max-width:480px; margin:0 auto 26px;}
+  .contact-links{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+
+  footer{padding:36px 0; text-align:center; color:var(--muted); font-size:0.82rem; position:relative; z-index:2;}
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Jayam Akshay<span>.</span></div>
+    <ul>
+      <li><a href="#work">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certs">Certs</a></li>
+      <li><a href="#interests">Interests</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="hero-3d"></canvas>
+  <div class="wrap">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="eyebrow">Bengaluru, India</div>
+        <h1 class="title">Turning raw data into <em>dashboards</em> people actually use.</h1>
+        <p class="hero-sub">I'm Jayam Akshay — a Software Developer with 2.5+ years bridging data analytics and application development. I build Power BI dashboards, DAX-driven data models, and ETL pipelines, and I develop cross-platform apps in C#/.NET.</p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary">Get in touch</a>
+          <a href="#work" class="btn btn-ghost">See my work</a>
+        </div>
+      </div>
+
+      <div class="mosaic">
+        <div class="tile">
+          <div class="label">Experience</div>
+          <div class="value amber">2.5+ yrs</div>
+        </div>
+        <div class="tile">
+          <div class="label">Dashboards / Day</div>
+          <div class="value">4</div>
+        </div>
+        <div class="tile">
+          <div class="label">Data Pipeline</div>
+          <div class="value teal">Synapse</div>
+        </div>
+        <div class="tile">
+          <div class="label">Core Tool</div>
+          <div class="value">Power BI</div>
+        </div>
+        <div class="tile">
+          <div class="label">Delivery Cadence</div>
+          <div class="bars">
+            <i style="height:40%"></i><i style="height:65%"></i><i style="height:50%"></i>
+            <i style="height:80%"></i><i style="height:60%"></i><i style="height:95%"></i>
+            <i style="height:70%"></i><i style="height:85%"></i>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="label">Focus Areas</div>
+          <div class="value" style="font-size:1.1rem; margin-top:14px; color:var(--muted); font-family:'IBM Plex Mono',monospace;">DAX · ETL · EDA · Data Modeling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span></span>SCROLL</div>
+</header>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Core work</div>
+      <h2>Dashboards &amp; data-driven projects</h2>
+    </div>
+
+    <div class="project reveal">
+      <div class="tag mono">01 / DASH</div>
+      <div>
+        <h3>Tester Analysis — Power BI</h3>
+        <p>Interactive Power BI dashboards to monitor KPIs and business performance metrics, with data models built by connecting multiple data sources.</p>
+        <ul>
+          <li>DAX-based calculated measures, KPIs, and advanced analysis</li>
+          <li>Exploratory Data Analysis (EDA) to surface trends and actionable insights</li>
+          <li>Power Query for data transformation and cleaning (ETL)</li>
+          <li>Published and managed reports via Power BI Service for secure sharing</li>
+          <li>Delivered up to 4 user-friendly dashboards per day based on stakeholder requirements</li>
+        </ul>
+        <div class="stack"><span>Power BI</span><span>DAX</span><span>Power Query</span><span>EDA</span></div>
+      </div>
+    </div>
+
+    <div class="project reveal">
+      <div class="tag mono">02 / APP</div>
+      <div>
+        <h3>Inigo — Cross-Platform Mobile App</h3>
+        <p>A .NET MAUI mobile application enabling real-time connectivity with industrial actuators over Bluetooth.</p>
+        <ul>
+          <li>Secure, reliable Bluetooth communication with industrial actuators</li>
+          <li>Read/write actuator registers with structured, register-based data storage</li>
+          <li>Real-time sensor data acquisition with dynamic graph visualization</li>
+          <li>Delivered 4 new features within 2 days</li>
+        </ul>
+        <div class="stack"><span>.NET MAUI</span><span>C#</span><span>Bluetooth</span></div>
+      </div>
+    </div>
+
+    <div class="project reveal">
+      <div class="tag mono">03 / ERP</div>
+      <div>
+        <h3>6Orbit — ERP Web App</h3>
+        <p>An ERP-based module improving transport and inventory management, built on a scalable C#/.NET architecture.</p>
+        <ul>
+          <li>Resolved up to 4 critical tickets per day</li>
+          <li>Backend integration and database operations for data integrity</li>
+          <li>Built and delivered within an Agile workflow (sprint planning, code reviews)</li>
+        </ul>
+        <div class="stack"><span>C#</span><span>.NET</span><span>MySQL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Toolkit</div>
+      <h2>Core skills</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <h3>BI &amp; Visualization</h3>
+        <p>Power BI, Tableau, DAX, Power Query, EDA, dashboard &amp; data modeling design.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Data &amp; Cloud</h3>
+        <p>ETL development, Azure Synapse, Azure Data Pipelines, MySQL.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Development</h3>
+        <p>C#, Python, .NET, .NET MAUI, HTML, CSS, Bootstrap, Visual Studio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Credentials</div>
+      <h2>Certifications &amp; education</h2>
+    </div>
+    <div class="cert-list">
+      <div class="cert-card reveal">
+        <div class="date mono">12 / 2023</div>
+        <h3>Power BI Complete Course</h3>
+        <p>Udemy</p>
+      </div>
+      <div class="cert-card reveal">
+        <div class="date mono">09 / 2025</div>
+        <h3>MAUI Cross-Platform Application Development</h3>
+        <p>Koenig Solutions</p>
+      </div>
+      <div class="cert-card reveal">
+        <div class="date mono">04 / 2023</div>
+        <h3>HTML, CSS &amp; Bootstrap</h3>
+        <p>Udemy</p>
+      </div>
+    </div>
+    <div class="cert-card reveal" style="margin-top:18px;">
+      <div class="date mono">2019 – 2023</div>
+      <h3>B.E. Computer Science — Dayananda Sagar Academy of Technology and Management</h3>
+    </div>
+  </div>
+</section>
+
+<section id="interests">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Beyond dashboards</div>
+      <h2>Cross-functional interests</h2>
+    </div>
+    <div class="interest-row reveal">
+      <div class="interest-badge">MOBILE</div>
+      <p>Cross-platform mobile app development with C#, .NET MAUI — Bluetooth connectivity, real-time data, and device integration (see Inigo).</p>
+    </div>
+    <div class="interest-row reveal">
+      <div class="interest-badge">WEB</div>
+      <p>ERP and web application development with C#/.NET and HTML/CSS/Bootstrap.</p>
+    </div>
+    <div class="interest-row reveal">
+      <div class="interest-badge">DESIGN</div>
+      <p>Thumbnail and light visual design work on request.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-panel reveal">
+      <h2>Let's work together</h2>
+      <p>Open to Data Analyst roles and freelance projects in Power BI dashboards, Excel automation, mobile app development, and web development.</p>
+      <div class="contact-links">
+        <a href="mailto:jayamakshay.jayam@gmail.com" class="btn btn-primary">Email me</a>
+        <a href="tel:+919989756957" class="btn btn-ghost">+91 99897 56957</a>
+        <a href="https://www.linkedin.com/in/jayam-akshay-1431741b8/" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Jayam Akshay. Built with Power BI precision.</div>
+</footer>
+
+<script>
+/* ============ custom cursor ============ */
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0, rx=0, ry=0, dx=0, dy=0;
+
+window.addEventListener('mousemove', e=>{
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx+'px'; dot.style.top = my+'px';
+  spawnTrail(mx,my);
+});
+
+function animateRing(){
+  rx += (mx-rx)*0.16; ry += (my-ry)*0.16;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+/* trailing particles that fade behind the cursor */
+let lastTrail = 0;
+function spawnTrail(x,y){
+  const now = performance.now();
+  if(now - lastTrail < 35) return; // throttle for perf
+  lastTrail = now;
+  const t = document.createElement('div');
+  t.className = 'cursor-trail';
+  t.style.left = x+'px'; t.style.top = y+'px';
+  document.body.appendChild(t);
+  t.animate(
+    [{opacity:0.7, transform:'translate(-50%,-50%) scale(1)'},
+     {opacity:0, transform:'translate(-50%,-50%) scale(0.2)'}],
+    {duration:500, easing:'ease-out'}
+  ).onfinish = ()=> t.remove();
+}
+
+/* click ripple */
+window.addEventListener('mousedown', e=>{
+  const r = document.createElement('div');
+  r.className = 'cursor-ripple';
+  r.style.left = e.clientX+'px'; r.style.top = e.clientY+'px';
+  document.body.appendChild(r);
+  setTimeout(()=> r.remove(), 650);
+  dot.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(2.2)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:300});
+});
+
+/* hover state + magnetic pull on interactive elements */
+document.querySelectorAll('a, button, .skill-card, .cert-card, .project').forEach(el=>{
+  el.classList.add('magnetic');
+  el.addEventListener('mouseenter', ()=> ring.classList.add('hovering'));
+  el.addEventListener('mouseleave', ()=>{
+    ring.classList.remove('hovering');
+    el.style.transform = 'translate(0,0)';
+  });
+  el.addEventListener('mousemove', (e)=>{
+    const rect = el.getBoundingClientRect();
+    const relX = e.clientX - (rect.left + rect.width/2);
+    const relY = e.clientY - (rect.top + rect.height/2);
+    const pull = el.matches('.btn') ? 0.35 : 0.08;
+    el.style.transform = `translate(${relX*pull}px, ${relY*pull}px)`;
+  });
+});
+
+/* ============ scroll reveal ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      io.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+/* ============ ambient particle field (data-node style) ============ */
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+let particles = [];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resizeParticles(){
+  pCanvas.width = window.innerWidth;
+  pCanvas.height = document.body.scrollHeight;
+}
+resizeParticles();
+window.addEventListener('resize', resizeParticles);
+
+const density = Math.min(70, Math.floor(window.innerWidth/22));
+for(let i=0;i<density;i++){
+  particles.push({
+    x: Math.random()*pCanvas.width,
+    y: Math.random()*pCanvas.height,
+    vx: (Math.random()-0.5)*0.25,
+    vy: (Math.random()-0.5)*0.25,
+    r: Math.random()*1.6+0.6
+  });
+}
+
+function drawParticles(){
+  pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+  const viewTop = window.scrollY - 200;
+  const viewBottom = window.scrollY + window.innerHeight + 200;
+
+  particles.forEach(p=>{
+    if(!reduceMotion){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>pCanvas.width) p.vx*=-1;
+      if(p.y<0||p.y>pCanvas.height) p.vy*=-1;
+    }
+  });
+
+  for(let i=0;i<particles.length;i++){
+    const p = particles[i];
+    if(p.y < viewTop || p.y > viewBottom) continue;
+    pCtx.beginPath();
+    pCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    pCtx.fillStyle = 'rgba(74,171,152,0.55)';
+    pCtx.fill();
+    for(let j=i+1;j<particles.length;j++){
+      const q = particles[j];
+      if(q.y < viewTop || q.y > viewBottom) continue;
+      const dx=p.x-q.x, dy=p.y-q.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist<110){
+        pCtx.beginPath();
+        pCtx.moveTo(p.x,p.y);
+        pCtx.lineTo(q.x,q.y);
+        pCtx.strokeStyle = `rgba(232,163,61,${0.12*(1-dist/110)})`;
+        pCtx.lineWidth=1;
+        pCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ============ 3D hero — nested wireframe geometry ============ */
+(function(){
+  const heroCanvas = document.getElementById('hero-3d');
+  const heroEl = document.querySelector('header.hero');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(68, heroEl.clientWidth/heroEl.clientHeight, 0.1, 100);
+  camera.position.z = heroEl.clientWidth > 1400 ? 5.0 : 4.3;
+
+  const renderer = new THREE.WebGLRenderer({canvas:heroCanvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(heroEl.clientWidth, heroEl.clientHeight);
+
+  // outer wireframe icosahedron — clean edge lines, teal
+  const outerGeo = new THREE.IcosahedronGeometry(3.8, 1);
+  const outerEdges = new THREE.EdgesGeometry(outerGeo);
+  const outerMat = new THREE.LineBasicMaterial({color:0x4aab98, transparent:true, opacity:0.55});
+  const outerShape = new THREE.LineSegments(outerEdges, outerMat);
+  scene.add(outerShape);
+
+  // inner wireframe icosahedron — smaller, amber, counter-rotating
+  const innerGeo = new THREE.IcosahedronGeometry(1.9, 0);
+  const innerEdges = new THREE.EdgesGeometry(innerGeo);
+  const innerMat = new THREE.LineBasicMaterial({color:0xe8a33d, transparent:true, opacity:0.75});
+  const innerShape = new THREE.LineSegments(innerEdges, innerMat);
+  scene.add(innerShape);
+
+  // faint vertex points on the outer shape for a subtle "data node" accent
+  const dotMat = new THREE.PointsMaterial({color:0xe8a33d, size:0.05, transparent:true, opacity:0.7});
+  const dotPoints = new THREE.Points(outerGeo, dotMat);
+  scene.add(dotPoints);
+
+  let targetRotX=0, targetRotY=0;
+  window.addEventListener('mousemove', (e)=>{
+    const nx = (e.clientX/window.innerWidth)-0.5;
+    const ny = (e.clientY/window.innerHeight)-0.5;
+    targetRotY = nx*0.6;
+    targetRotX = ny*0.4;
+  });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    outerShape.rotation.y += 0.0016;
+    outerShape.rotation.x += 0.0006;
+    dotPoints.rotation.copy(outerShape.rotation);
+
+    innerShape.rotation.y -= 0.0024;
+    innerShape.rotation.x -= 0.0009;
+
+    outerShape.rotation.x += (targetRotX - outerShape.rotation.x)*0.015;
+    outerShape.rotation.y += (targetRotY*0.3 - 0)*0.015;
+    innerShape.rotation.x += (-targetRotX - innerShape.rotation.x)*0.015;
+
+    renderer.render(scene, camera);
+  }
+  if(!reduceMotion){ animate(); } else { renderer.render(scene, camera); }
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = heroEl.clientWidth/heroEl.clientHeight;
+    camera.position.z = heroEl.clientWidth > 1400 ? 5.0 : 4.3;
+    camera.updateProjectionMatrix();
+    renderer.setSize(heroEl.clientWidth, heroEl.clientHeight);
+  });
+})();
+</script>
+
+</body>
+</html>
