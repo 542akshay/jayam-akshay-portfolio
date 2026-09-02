@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jayam Akshay — Data Analyst &amp; Power BI Developer</title>
+<title>Jayam Akshay — BI Developer &amp; Data Analyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -254,6 +254,19 @@
   }
   @media (max-width:600px){.project{grid-template-columns:1fr; gap:8px;}}
 
+  /* EXPERIENCE */
+  .exp{display:grid; grid-template-columns:170px 1fr; gap:24px; padding:26px 0; border-bottom:1px solid var(--grid); transition:transform 0.25s;}
+  .exp:hover{transform:translateX(6px);}
+  .exp:last-child{border-bottom:none;}
+  .exp .when{font-family:'IBM Plex Mono',monospace; color:var(--teal); font-size:0.8rem; padding-top:4px;}
+  .exp .role{font-size:1.2rem; margin-bottom:2px;}
+  .exp .org{font-family:'IBM Plex Mono',monospace; color:var(--amber); font-size:0.85rem; margin-bottom:12px;}
+  .exp ul{padding-left:18px; color:var(--muted); font-size:0.92rem;}
+  .exp ul li{margin-bottom:6px;}
+  .exp .stack{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+  .exp .stack span{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; border:1px solid var(--grid); border-radius:20px; padding:4px 10px; color:var(--muted);}
+  @media (max-width:600px){.exp{grid-template-columns:1fr; gap:8px;}}
+
   /* CERTS */
   .cert-list{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
   .cert-card{
@@ -300,6 +313,7 @@
   <div class="wrap">
     <div class="brand">Jayam Akshay<span>.</span></div>
     <ul>
+      <li><a href="#experience">Experience</a></li>
       <li><a href="#work">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#certs">Certs</a></li>
@@ -316,7 +330,7 @@
       <div class="hero-text">
         <div class="eyebrow">Bengaluru, India</div>
         <h1 class="title">Turning raw data into <em>dashboards</em> people actually use.</h1>
-        <p class="hero-sub">I'm Jayam Akshay — a Software Developer with 2.5+ years bridging data analytics and application development. I build Power BI dashboards, DAX-driven data models, and ETL pipelines, and I develop cross-platform apps in C#/.NET.</p>
+        <p class="hero-sub">I'm Jayam Akshay — a Power BI Developer with nearly 3 years designing scalable semantic models, STAR-schema architectures, and advanced DAX for large, multi-source datasets. I build governed, RLS-secured reports and ETL/ELT pipelines in Azure Synapse with PySpark and Spark SQL, delivered through Microsoft Fabric and Power BI.</p>
         <div class="hero-cta">
           <a href="#contact" class="btn btn-primary">Get in touch</a>
           <a href="#work" class="btn btn-ghost">See my work</a>
@@ -326,22 +340,22 @@
       <div class="mosaic">
         <div class="tile">
           <div class="label">Experience</div>
-          <div class="value amber">2.5+ yrs</div>
+          <div class="value amber">~3 yrs</div>
         </div>
         <div class="tile">
-          <div class="label">Dashboards / Day</div>
-          <div class="value">4</div>
+          <div class="label">Dashboards built</div>
+          <div class="value">~35</div>
         </div>
         <div class="tile">
-          <div class="label">Data Pipeline</div>
-          <div class="value teal">Synapse</div>
+          <div class="label">Projects</div>
+          <div class="value teal">6</div>
         </div>
         <div class="tile">
-          <div class="label">Core Tool</div>
+          <div class="label">Core tool</div>
           <div class="value">Power BI</div>
         </div>
         <div class="tile">
-          <div class="label">Delivery Cadence</div>
+          <div class="label">Delivery cadence · 2-wk sprints</div>
           <div class="bars">
             <i style="height:40%"></i><i style="height:65%"></i><i style="height:50%"></i>
             <i style="height:80%"></i><i style="height:60%"></i><i style="height:95%"></i>
@@ -349,14 +363,53 @@
           </div>
         </div>
         <div class="tile">
-          <div class="label">Focus Areas</div>
-          <div class="value" style="font-size:1.1rem; margin-top:14px; color:var(--muted); font-family:'IBM Plex Mono',monospace;">DAX · ETL · EDA · Data Modeling</div>
+          <div class="label">Focus areas</div>
+          <div class="value" style="font-size:1.1rem; margin-top:14px; color:var(--muted); font-family:'IBM Plex Mono',monospace;">Semantic Modeling · DAX · RLS · ETL/ELT</div>
         </div>
       </div>
     </div>
   </div>
   <div class="scroll-hint"><span></span>SCROLL</div>
 </header>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Where I've worked</div>
+      <h2>Experience</h2>
+    </div>
+
+    <div class="exp reveal">
+      <div class="when mono">Dec 2023 — Present</div>
+      <div>
+        <h3 class="role">Data Analyst</h3>
+        <div class="org">Flowserve</div>
+        <ul>
+          <li>Architected Power BI semantic models — ~35 dashboards across 6 projects on STAR-schema models integrating 3+ sources (~100K rows each), turning fragmented multi-source data into a single decision-ready view for senior leadership.</li>
+          <li>Implemented Row-Level Security (RLS) on every report delivered, enforcing role- and stakeholder-based access across 5+ business functions while keeping models auditable and governed.</li>
+          <li>Tuned DAX measures and tabular/VertiPaq model design to keep large multi-source datasets responsive for self-service use by non-technical stakeholders.</li>
+          <li>Built and orchestrated ETL/ELT pipelines in Azure Synapse Analytics with PySpark and Spark SQL, curating Parquet tables (~40–50K rows/run) into Azure Storage for downstream Microsoft Fabric and Power BI analytics.</li>
+          <li>Version-controlled and deployed pipelines through Azure DevOps CI/CD, keeping scheduled jobs running unattended.</li>
+          <li>Re-engineered the Positioner Tester reporting workflow to pull files directly from Azure Storage — cutting a recurring task from 10–15 minutes to under 1 minute (~350 hours/year saved).</li>
+          <li>Presented Fabric and Power BI insights in company townhalls via executive-ready decks, and partnered with Sales on Tableau dashboards across 2-week sprints.</li>
+        </ul>
+        <div class="stack"><span>Power BI</span><span>DAX</span><span>Microsoft Fabric</span><span>Azure Synapse</span><span>PySpark</span><span>Spark SQL</span><span>Azure DevOps</span><span>Tableau</span></div>
+      </div>
+    </div>
+
+    <div class="exp reveal">
+      <div class="when mono">Mar 2023 — Aug 2023</div>
+      <div>
+        <h3 class="role">Software Developer Intern</h3>
+        <div class="org">Accrete Globus Technologies</div>
+        <ul>
+          <li>Delivered ERP features, reporting views, and data analysis within an Agile team.</li>
+        </ul>
+        <div class="stack"><span>PHP</span><span>React JS</span><span>MySQL</span><span>Agile</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="work">
   <div class="wrap">
@@ -369,44 +422,43 @@
       <div class="tag mono">01 / DASH</div>
       <div>
         <h3>Tester Analysis — Power BI</h3>
-        <p>Interactive Power BI dashboards to monitor KPIs and business performance metrics, with data models built by connecting multiple data sources.</p>
+        <p>A governed Power BI semantic model that consolidates fragmented operational data into one decision-ready reporting view for leadership.</p>
         <ul>
-          <li>DAX-based calculated measures, KPIs, and advanced analysis</li>
-          <li>Exploratory Data Analysis (EDA) to surface trends and actionable insights</li>
-          <li>Power Query for data transformation and cleaning (ETL)</li>
-          <li>Published and managed reports via Power BI Service for secure sharing</li>
-          <li>Delivered up to 4 user-friendly dashboards per day based on stakeholder requirements</li>
+          <li>Advanced DAX measures on a STAR-schema model with Row-Level Security (RLS)</li>
+          <li>EDA across 300K+ rows from 3+ sources to surface trends and actionable insights</li>
+          <li>Multi-source data modeled and cleansed into analytics-ready tables with Power Query (M)</li>
+          <li>Published to Power BI Service on scheduled refresh with RLS — 5 stakeholder groups get secure, always-current, role-appropriate access</li>
         </ul>
-        <div class="stack"><span>Power BI</span><span>DAX</span><span>Power Query</span><span>EDA</span></div>
+        <div class="stack"><span>Power BI</span><span>DAX</span><span>STAR-schema</span><span>RLS</span><span>Power Query</span></div>
       </div>
     </div>
 
     <div class="project reveal">
       <div class="tag mono">02 / APP</div>
       <div>
-        <h3>Inigo — Cross-Platform Mobile App</h3>
-        <p>A .NET MAUI mobile application enabling real-time connectivity with industrial actuators over Bluetooth.</p>
+        <h3>Inigo — Cross-Platform Mobile App (.NET MAUI)</h3>
+        <p>One .NET MAUI codebase shipped to iOS, Android, and Windows, connecting to industrial actuators over Bluetooth in real time.</p>
         <ul>
-          <li>Secure, reliable Bluetooth communication with industrial actuators</li>
-          <li>Read/write actuator registers with structured, register-based data storage</li>
+          <li>Single generic codebase across iOS, Android, and Windows — avoiding three separate platform builds</li>
+          <li>Secure Bluetooth read/write of ~4,000 actuator registers across 5 actuator types</li>
           <li>Real-time sensor data acquisition with dynamic graph visualization</li>
-          <li>Delivered 4 new features within 2 days</li>
+          <li>Stability and performance fixes cut response time from ~2.5–3s to ~2s; repo and release pipeline hosted in Azure DevOps</li>
         </ul>
-        <div class="stack"><span>.NET MAUI</span><span>C#</span><span>Bluetooth</span></div>
+        <div class="stack"><span>.NET MAUI</span><span>C#</span><span>Bluetooth</span><span>Azure DevOps</span></div>
       </div>
     </div>
 
     <div class="project reveal">
       <div class="tag mono">03 / ERP</div>
       <div>
-        <h3>6Orbit — ERP Web App</h3>
-        <p>An ERP-based module improving transport and inventory management, built on a scalable C#/.NET architecture.</p>
+        <h3>6Orbit — ERP Web Portal</h3>
+        <p>An ERP portal for transport and inventory management, built and maintained within an Agile team during my internship.</p>
         <ul>
-          <li>Resolved up to 4 critical tickets per day</li>
-          <li>Backend integration and database operations for data integrity</li>
-          <li>Built and delivered within an Agile workflow (sprint planning, code reviews)</li>
+          <li>Resolved ~200 support tickets (25–30 critical), improving portal stability and data integrity</li>
+          <li>Built 3–4 new features across ~10 screens spanning transport and inventory workflows</li>
+          <li>Backend integration and database operations delivered through sprint planning and code reviews</li>
         </ul>
-        <div class="stack"><span>C#</span><span>.NET</span><span>MySQL</span></div>
+        <div class="stack"><span>PHP</span><span>React JS</span><span>MySQL</span><span>Agile</span></div>
       </div>
     </div>
   </div>
@@ -420,16 +472,28 @@
     </div>
     <div class="skills-grid">
       <div class="skill-card reveal">
-        <h3>BI &amp; Visualization</h3>
-        <p>Power BI, Tableau, DAX, Power Query, EDA, dashboard &amp; data modeling design.</p>
+        <h3>Power BI &amp; Semantic Modeling</h3>
+        <p>Power BI (advanced), semantic model design, STAR-schema &amp; dimensional modeling, Row-Level Security (RLS), cross-report navigation.</p>
       </div>
       <div class="skill-card reveal">
-        <h3>Data &amp; Cloud</h3>
-        <p>ETL development, Azure Synapse, Azure Data Pipelines, MySQL.</p>
+        <h3>DAX &amp; Performance</h3>
+        <p>Advanced DAX — iterators, context transition, time intelligence — with VertiPaq/tabular model optimization for large datasets.</p>
       </div>
       <div class="skill-card reveal">
-        <h3>Development</h3>
-        <p>C#, Python, .NET, .NET MAUI, HTML, CSS, Bootstrap, Visual Studio.</p>
+        <h3>Data Engineering &amp; ETL</h3>
+        <p>ETL/ELT development &amp; orchestration in Azure Synapse, PySpark, Spark SQL, Parquet, batch scheduling, and data lake/warehouse design.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Cloud &amp; Platform</h3>
+        <p>Microsoft Azure — Synapse Analytics, Azure Storage / Data Lake, Azure DevOps (CI/CD), and Microsoft Fabric.</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Query &amp; Languages</h3>
+        <p>Advanced SQL, Spark SQL, Python, PySpark, DAX, C#, and Power Query (M language).</p>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Governance &amp; Ways of Working</h3>
+        <p>Data profiling, cleansing &amp; validation, RLS-based access governance, DataOps, Agile/Scrum, Git, and stakeholder collaboration.</p>
       </div>
     </div>
   </div>
@@ -472,16 +536,16 @@
       <h2>Cross-functional interests</h2>
     </div>
     <div class="interest-row reveal">
-      <div class="interest-badge">MOBILE</div>
-      <p>Cross-platform mobile app development with C#, .NET MAUI — Bluetooth connectivity, real-time data, and device integration (see Inigo).</p>
+      <div class="interest-badge">AUTOMATION</div>
+      <p>Re-engineering manual reporting into automated, scheduled pipelines — like the Positioner Tester workflow that saves ~350 hours a year.</p>
     </div>
     <div class="interest-row reveal">
-      <div class="interest-badge">WEB</div>
-      <p>ERP and web application development with C#/.NET and HTML/CSS/Bootstrap.</p>
+      <div class="interest-badge">STORYTELLING</div>
+      <p>Translating technical findings into executive-ready narratives and dashboards for leadership townhalls.</p>
     </div>
     <div class="interest-row reveal">
-      <div class="interest-badge">DESIGN</div>
-      <p>Thumbnail and light visual design work on request.</p>
+      <div class="interest-badge">APP DEV</div>
+      <p>Cross-platform mobile development with .NET MAUI and C# — Bluetooth connectivity and real-time device integration (see Inigo).</p>
     </div>
   </div>
 </section>
@@ -490,11 +554,12 @@
   <div class="wrap">
     <div class="contact-panel reveal">
       <h2>Let's work together</h2>
-      <p>Open to Data Analyst roles and freelance projects in Power BI dashboards, Excel automation, mobile app development, and web development.</p>
+      <p>Open to Data Analyst and BI Developer roles — building Power BI semantic models, advanced DAX, and Azure data pipelines. Always happy to talk data.</p>
       <div class="contact-links">
         <a href="mailto:jayamakshay.jayam@gmail.com" class="btn btn-primary">Email me</a>
         <a href="tel:+919989756957" class="btn btn-ghost">+91 99897 56957</a>
         <a href="https://www.linkedin.com/in/jayam-akshay-1431741b8/" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/542akshay" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
   </div>
